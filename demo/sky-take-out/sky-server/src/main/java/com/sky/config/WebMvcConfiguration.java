@@ -17,6 +17,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 /**
  * 配置类，注册web层相关组件
+ * TEST GIT >>>>>>
  */
 @Configuration
 @Slf4j
