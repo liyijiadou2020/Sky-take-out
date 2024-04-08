@@ -1,6 +1,7 @@
 package com.sky.controller.admin;
 
 import com.sky.constant.JwtClaimsConstant;
+import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.entity.Employee;
 import com.sky.properties.JwtProperties;
@@ -75,5 +76,27 @@ public class EmployeeController {
     public Result<String> logout() {
         return Result.success();
     }
+
+    /**
+     * TODO 20240408 - day02开发
+     * TODO 员工分页查询
+     * TODO 启用/禁用员工账号
+     * TODO 编辑员工
+     * TODO 导入分类模块功能代码
+     */
+
+    /**
+     * 新增员工
+     * @param employeeDTO 前端传入的 employee JSON对象
+     * @return 成功标志
+     */
+    @PostMapping
+    @ApiOperation("新增员工")
+    public Result save(@RequestBody EmployeeDTO employeeDTO) {
+        log.info("新增员工：{}", employeeDTO);
+        employeeService.save(employeeDTO);
+        return Result.success();
+    }
+
 
 }
