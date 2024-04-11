@@ -31,8 +31,6 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     @Autowired
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
 
-    // todo 拓展Spring MVC 框架的消息转化器，统一对日期类型进行格式化处理
-
 
     /**
      * 对后端返回给前端的数据进行统一的格式处理
