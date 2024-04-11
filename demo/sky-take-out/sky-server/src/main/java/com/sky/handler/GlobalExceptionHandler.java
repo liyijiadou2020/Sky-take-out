@@ -28,8 +28,6 @@ public class GlobalExceptionHandler {
         return Result.error(ex.getMessage());
     }
 
-    // TODO 处理sql的重复键异常
-
     /**
      * 处理SQL异常
      *
