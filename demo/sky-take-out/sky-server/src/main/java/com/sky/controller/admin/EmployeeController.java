@@ -77,8 +77,7 @@ public class EmployeeController {
     }
 
     /**
-     * TODO 20240408 - day02开发
-     * TODO 编辑员工
+     * 20240408 - day02开发
      * TODO 导入分类模块功能代码
      */
 
@@ -118,6 +117,31 @@ public class EmployeeController {
     public Result startOrStop(@PathVariable Integer status, Long id) {
         log.info("启用/禁用员工账号: {}, {}", status, id);
         employeeService.startOrStop(status, id);
+        return Result.success();
+    }
+
+    /**
+     * 根据id查询员工信息
+     * @param id
+     * @return
+     */
+    @ApiOperation("根据id查询员工信息")
+    @GetMapping("/{id}")
+    public Result<Employee> getById(@PathVariable Long id) {
+        Employee employee = employeeService.getById(id);
+        return Result.success(employee);
+    }
+
+    /**
+     * 编辑员工信息
+     * @param employeeDTO
+     * @return
+     */
+    @PutMapping
+    @ApiOperation("编辑员工信息")
+    public Result update(@RequestBody EmployeeDTO employeeDTO) {
+        log.info("编辑员工信息：{}", employeeDTO);
+        employeeService.update(employeeDTO);
         return Result.success();
     }
 
