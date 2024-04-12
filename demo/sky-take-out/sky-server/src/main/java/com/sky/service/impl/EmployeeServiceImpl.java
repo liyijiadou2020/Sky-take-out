@@ -112,4 +112,19 @@ public class EmployeeServiceImpl implements EmployeeService {
         return new PageResult(total, records);
     }
 
+    /**
+     * 启用/禁用员工账号
+     *
+     * @param status 1为启用，0为禁用
+     * @param id     员工id
+     */
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        Employee employee = Employee.builder() // 使用构建器构建实体类对象，这是一种比较新的编程风格
+                .status(status)
+                .id(id)
+                .build();
+        employeeMapper.update(employee); // 将update写成动态语句，更具通用性
+    }
+
 }
