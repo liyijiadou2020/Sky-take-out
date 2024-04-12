@@ -70,8 +70,6 @@ public class DishController {
         return Result.success();
     }
 
-//     TODO 修改菜品
-
     /**
      * 根据id查询菜品和对应的口味数据
      *
@@ -84,6 +82,21 @@ public class DishController {
         log.info("根据id查询菜品：{}", id);
         DishVO dishVO = dishService.getByIdWithFlavor(id);
         return Result.success(dishVO);
+    }
+
+
+    /**
+     * 修改菜品
+     *
+     * @param dishDTO
+     * @return
+     */
+    @PutMapping
+    @ApiOperation("修改菜品")
+    public Result update(@RequestBody DishDTO dishDTO) {
+        log.info("修改菜品：{}", dishDTO);
+        dishService.updateWithFlavor(dishDTO);
+        return Result.success();
     }
 
 }
