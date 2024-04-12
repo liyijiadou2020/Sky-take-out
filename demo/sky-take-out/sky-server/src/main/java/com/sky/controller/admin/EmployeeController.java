@@ -22,6 +22,7 @@ import java.util.Map;
 
 /**
  * 员工管理
+ * 20240408 - day02开发
  */
 @RestController
 @RequestMapping("/admin/employee")
@@ -47,7 +48,7 @@ public class EmployeeController {
 
         Employee employee = employeeService.login(employeeLoginDTO);
 
-        //登录成功后，生成jwt令牌
+        // 登录成功后，生成jwt令牌
         Map<String, Object> claims = new HashMap<>();
         claims.put(JwtClaimsConstant.EMP_ID, employee.getId());
         String token = JwtUtil.createJWT(
@@ -77,12 +78,8 @@ public class EmployeeController {
     }
 
     /**
-     * 20240408 - day02开发
-     * TODO 导入分类模块功能代码
-     */
-
-    /**
      * 新增员工
+     *
      * @param employeeDTO 前端传入的 employee JSON对象
      * @return 成功标志
      */
@@ -108,8 +105,9 @@ public class EmployeeController {
 
     /**
      * 启用/禁用员工账号
+     *
      * @param status 1为启用，0为禁用
-     * @param id 员工id
+     * @param id     员工id
      * @return
      */
     @ApiOperation("启用或禁用员工账号")
@@ -122,6 +120,7 @@ public class EmployeeController {
 
     /**
      * 根据id查询员工信息
+     *
      * @param id
      * @return
      */
@@ -134,6 +133,7 @@ public class EmployeeController {
 
     /**
      * 编辑员工信息
+     *
      * @param employeeDTO
      * @return
      */
