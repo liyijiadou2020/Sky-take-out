@@ -78,8 +78,6 @@ public class EmployeeController {
 
     /**
      * TODO 20240408 - day02开发
-     *
-     * TODO 启用/禁用员工账号
      * TODO 编辑员工
      * TODO 导入分类模块功能代码
      */
@@ -98,7 +96,6 @@ public class EmployeeController {
     }
 
     /**
-     * TODO 员工分页查询
      * @param employeePageQueryDTO
      * @return
      */
@@ -110,8 +107,12 @@ public class EmployeeController {
         return Result.success(pageResult);
     }
 
-
-
+    /**
+     * 启用/禁用员工账号
+     * @param status 1为启用，0为禁用
+     * @param id 员工id
+     * @return
+     */
     @ApiOperation("启用或禁用员工账号")
     @PostMapping("/status/{status}")
     public Result startOrStop(@PathVariable Integer status, Long id) {
