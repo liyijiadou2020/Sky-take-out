@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -97,7 +98,7 @@ public class AddressBookController {
     @GetMapping("default")
     @ApiOperation("查询默认地址")
     public Result<AddressBook> getDefault() {
-        //SQL:select * from address_book where user_id = ? and is_default = 1
+        // SQL:select * from address_book where user_id = ? and is_default = 1
         AddressBook addressBook = new AddressBook();
         addressBook.setIsDefault(1);
         addressBook.setUserId(BaseContext.getCurrentId());
