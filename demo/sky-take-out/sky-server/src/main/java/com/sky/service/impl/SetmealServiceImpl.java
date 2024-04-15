@@ -41,7 +41,7 @@ public class SetmealServiceImpl implements SetmealService {
 
     /**
      * 新增套餐，同时需要保存套餐和菜品的关联关系
-     *
+     * TODO BUG
      * @param setmealDTO
      */
     @Transactional
@@ -61,7 +61,7 @@ public class SetmealServiceImpl implements SetmealService {
         });
 
         //保存套餐和菜品的关联关系
-        setmealDishMapper.insertBatch(setmealDishes);
+        setmealDishMapper.insertBatch(setmealDishes); // TODO BUG
     }
 
     /**
