@@ -19,7 +19,7 @@ public interface OrderService {
 
 
     /**
-     * 订单支付
+     * 订单支付（模拟支付成功）
      * @param ordersPaymentDTO
      * @return
      */

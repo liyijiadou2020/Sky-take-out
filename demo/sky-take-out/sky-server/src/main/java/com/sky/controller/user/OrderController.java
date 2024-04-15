@@ -29,7 +29,6 @@ public class OrderController {
     /**
      * day08 - 用户下单，用户支付
      *
-     * TODO 订单支付
      * TODO 历史订单查询
      * TODO 查询订单详情
      * TODO 用户取消订单
@@ -52,6 +51,8 @@ public class OrderController {
 
     /**
      * 订单支付
+     * 由于没有商户的微信支付认证，这里采用了模拟交易成功的方法。
+     * 需要在对应的微信小程序里面修改支付代码。
      *
      * @param ordersPaymentDTO
      * @return
@@ -60,7 +61,7 @@ public class OrderController {
     @ApiOperation("订单支付")
     public Result<OrderPaymentVO> payment(@RequestBody OrdersPaymentDTO ordersPaymentDTO) throws Exception {
         log.info("订单支付：{}", ordersPaymentDTO);
-        OrderPaymentVO orderPaymentVO = orderService.payment(ordersPaymentDTO); // TODO 修改payment
+        OrderPaymentVO orderPaymentVO = orderService.payment(ordersPaymentDTO);
         log.info("生成预支付交易单：{}", orderPaymentVO);
 
         // 模拟交易成功，修改数据库订单状态
