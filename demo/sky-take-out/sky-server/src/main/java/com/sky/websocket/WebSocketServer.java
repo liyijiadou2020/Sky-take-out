@@ -1,5 +1,6 @@
 package com.sky.websocket;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -16,6 +17,7 @@ import java.util.Map;
  */
 @Component
 @ServerEndpoint("/ws/{sid}")
+@Slf4j
 public class WebSocketServer {
 
     //存放会话对象
@@ -58,9 +60,11 @@ public class WebSocketServer {
      */
     public void sendToAllClient(String message) {
         Collection<Session> sessions = sessionMap.values();
+        log.info("已连接的客户端有 " + sessions.size() + " 个.");
         for (Session session : sessions) {
             try {
                 //服务器向客户端发送消息
+                log.info("向客户端 " + session.getId() + " 发送消息");
                 session.getBasicRemote().sendText(message);
             } catch (Exception e) {
                 e.printStackTrace();
