@@ -1,4 +1,5 @@
 package com.sky.service.impl;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
@@ -12,6 +13,7 @@ import com.sky.service.OrderService;
 import com.sky.utils.WeChatPayUtil;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.websocket.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 /**
  * Created with IntelliJ IDEA 2023.2.2
  *
@@ -46,8 +50,8 @@ public class OrderServiceImpl implements OrderService {
     private UserMapper userMapper;
     @Autowired
     private WeChatPayUtil weChatPayUtil;
-    // @Autowired
-    // private WebSocketServer webSocketServer;
+    @Autowired
+    private WebSocketServer webSocketServer;
 
 
     /**
@@ -154,14 +158,38 @@ public class OrderServiceImpl implements OrderService {
         return vo;
     }
 
+    // /**
+    //  * 模拟支付成功，修改订单状态【模拟支付成功】
+    //  *
+    //  * @param outTradeNo
+    //  */
+    // public void paySuccess(String outTradeNo) {
+    //
+    //     // 根据订单号查询订单
+    //     Orders ordersDB = orderMapper.getByNumber(outTradeNo);
+    //
+    //     // 根据订单id更新订单的状态、支付方式、支付状态、结账时间
+    //     Orders orders = Orders.builder()
+    //             .id(ordersDB.getId())
+    //             .status(Orders.TO_BE_CONFIRMED)
+    //             .payStatus(Orders.PAID)
+    //             .checkoutTime(LocalDateTime.now())
+    //             .build();
+    //
+    //     orderMapper.update(orders);
+    // }
+
+
     /**
      * 支付成功，修改订单状态
      *
      * @param outTradeNo
      */
     public void paySuccess(String outTradeNo) {
+        // 当前登录用户id
+        // Long userId = BaseContext.getCurrentId();
 
-        // 根据订单号查询订单
+        // 根据订单号查询当前用户的订单
         Orders ordersDB = orderMapper.getByNumber(outTradeNo);
 
         // 根据订单id更新订单的状态、支付方式、支付状态、结账时间
@@ -173,6 +201,16 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         orderMapper.update(orders);
+
+        //通过websocket向客户端浏览器推送消息 type orderId content
+        Map map = new HashMap();
+        map.put("type",1); // 1表示来单提醒 2表示客户催单
+        map.put("orderId",ordersDB.getId());
+        map.put("content","您有新的订单：" + outTradeNo + "。请及时处理。");
+
+        String json = JSON.toJSONString(map);
+        webSocketServer.sendToAllClient(json);
     }
+
 
 }

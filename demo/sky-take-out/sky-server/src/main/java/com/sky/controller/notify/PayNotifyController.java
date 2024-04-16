@@ -31,7 +31,7 @@ public class PayNotifyController {
     private WeChatProperties weChatProperties;
 
     /**
-     * 支付成功回调
+     * 支付成功回调（微信小程序端的回调）
      *
      * @param request
      */
