@@ -226,7 +226,7 @@ var _api = __webpack_require__(/*! @/pages/api/api.js */ 24);function ownKeys(ob
             // 直接调用支付成功的页面
             wx.showModal({
               title: '提示',
-              content: '支付成功',
+              content: '模拟支付成功',
               success:function(){
                 uni.redirectTo({url: '/pages/success/index?orderId=' + _this.orderId});
               }
