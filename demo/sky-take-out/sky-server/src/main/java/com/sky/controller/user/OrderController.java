@@ -29,13 +29,12 @@ public class OrderController {
     private OrderService orderService;
 
     /**
-     * day08 - 用户下单，用户支付
-     *
-     * TODO 历史订单查询
-     * TODO 查询订单详情
-     * TODO 用户取消订单
-     * TODO 再来一单
-     * TODO 客户催单
+     * day08 + day10
+     * - 用户下单 /user/order/submit
+     * - 用户支付 /user/order/payment
+     * - 用户取消订单 /user/order/cancel
+     * - 再来一单 /user/repetition/{id}
+     * - 客户催单 /user/reminder/{id}
      */
 
     /**
@@ -53,7 +52,7 @@ public class OrderController {
     }
 
     /**
-     * 订单支付
+     * 【模拟】订单支付
      * 由于没有商户的微信支付认证，这里采用了模拟交易成功的方法。
      * 需要在对应的微信小程序里面修改支付代码。
      *

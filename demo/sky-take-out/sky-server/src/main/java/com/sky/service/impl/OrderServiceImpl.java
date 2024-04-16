@@ -134,7 +134,7 @@ public class OrderServiceImpl implements OrderService {
         Long userId = BaseContext.getCurrentId();
         User user = userMapper.getById(userId);
 
-        //调用微信支付接口，生成预支付交易单
+        // 调用微信支付接口，生成预支付交易单
         // JSONObject jsonObject = weChatPayUtil.pay(
         //         ordersPaymentDTO.getOrderNumber(), //商户订单号
         //         new BigDecimal(0.01), //支付金额，单位 元
@@ -164,35 +164,13 @@ public class OrderServiceImpl implements OrderService {
         return vo;
     }
 
-    // /**
-    //  * 模拟支付成功，修改订单状态【模拟支付成功】
-    //  *
-    //  * @param outTradeNo
-    //  */
-    // public void paySuccess(String outTradeNo) {
-    //
-    //     // 根据订单号查询订单
-    //     Orders ordersDB = orderMapper.getByNumber(outTradeNo);
-    //
-    //     // 根据订单id更新订单的状态、支付方式、支付状态、结账时间
-    //     Orders orders = Orders.builder()
-    //             .id(ordersDB.getId())
-    //             .status(Orders.TO_BE_CONFIRMED)
-    //             .payStatus(Orders.PAID)
-    //             .checkoutTime(LocalDateTime.now())
-    //             .build();
-    //
-    //     orderMapper.update(orders);
-    // }
-
-
     /**
-     * 支付成功，修改订单状态并向客户端浏览器推送消息
+     * 支付成功，修改订单状态
      *
      * @param outTradeNo
      */
     public void paySuccess(String outTradeNo) {
-        // 当前登录用户id
+        // 当前登录用户id，这里不需要
         // Long userId = BaseContext.getCurrentId();
 
         // 根据订单号查询当前用户的订单
@@ -208,11 +186,11 @@ public class OrderServiceImpl implements OrderService {
 
         orderMapper.update(orders);
 
-        //通过websocket向客户端浏览器推送消息 type orderId content
+        // 通过websocket向客户端浏览器推送消息 type orderId content
         Map map = new HashMap();
-        map.put("type",1); // 1表示来单提醒 2表示客户催单
-        map.put("orderId",ordersDB.getId());
-        map.put("content","订单号：" + outTradeNo);
+        map.put("type", 1); // 1表示来单提醒 2表示客户催单
+        map.put("orderId", ordersDB.getId());
+        map.put("content", "订单号：" + outTradeNo);
 
         String json = JSON.toJSONString(map);
         webSocketServer.sendToAllClient(json);
@@ -293,7 +271,7 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
         }
 
-        //订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消
+        // 订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消
         if (ordersDB.getStatus() > 2) {
             throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
         }
@@ -302,15 +280,15 @@ public class OrderServiceImpl implements OrderService {
         orders.setId(ordersDB.getId());
 
         // 订单处于待接单状态下取消，需要进行退款
-        if (ordersDB.getStatus().equals(Orders.TO_BE_CONFIRMED)) {
-            //调用微信支付退款接口
-            weChatPayUtil.refund(
-                    ordersDB.getNumber(), //商户订单号
-                    ordersDB.getNumber(), //商户退款单号
-                    new BigDecimal(0.01),//退款金额，单位 元
-                    new BigDecimal(0.01));//原订单金额
+        if (ordersDB.getStatus().equals(Orders.TO_BE_CONFIRMED)) { // todo 修改退款的逻辑
+            // // 调用微信支付退款接口
+            // weChatPayUtil.refund(
+            //         ordersDB.getNumber(), // 商户订单号
+            //         ordersDB.getNumber(), // 商户退款单号
+            //         new BigDecimal(0.01),// 退款金额，单位 元
+            //         new BigDecimal(0.01));// 原订单金额
 
-            //支付状态修改为 退款
+            // 支付状态修改为 退款
             orders.setPayStatus(Orders.REFUND);
         }
 
@@ -440,7 +418,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 拒单
+     * 商家拒单
      *
      * @param ordersRejectionDTO
      */
@@ -453,16 +431,17 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
         }
 
-        //支付状态
+        // 支付状态
         Integer payStatus = ordersDB.getPayStatus();
         if (payStatus == Orders.PAID) {
-            //用户已支付，需要退款
-            String refund = weChatPayUtil.refund(
-                    ordersDB.getNumber(),
-                    ordersDB.getNumber(),
-                    new BigDecimal(0.01),
-                    new BigDecimal(0.01));
-            log.info("申请退款：{}", refund);
+            // 用户已支付，需要退款
+            // String refund = weChatPayUtil.refund(
+            //         ordersDB.getNumber(),
+            //         ordersDB.getNumber(),
+            //         new BigDecimal(0.01),
+            //         new BigDecimal(0.01));
+            // log.info("申请退款：{}", refund);
+            log.info("拒单-用户已支付-模拟申请退款");
         }
 
         // 拒单需要退款，根据订单id更新订单状态、拒单原因、取消时间
@@ -484,16 +463,17 @@ public class OrderServiceImpl implements OrderService {
         // 根据id查询订单
         Orders ordersDB = orderMapper.getById(ordersCancelDTO.getId());
 
-        //支付状态
+        // 支付状态
         Integer payStatus = ordersDB.getPayStatus();
         if (payStatus == 1) {
-            //用户已支付，需要退款
-            String refund = weChatPayUtil.refund(
-                    ordersDB.getNumber(),
-                    ordersDB.getNumber(),
-                    new BigDecimal(0.01),
-                    new BigDecimal(0.01));
-            log.info("申请退款：{}", refund);
+            // 用户已支付，需要退款
+            // String refund = weChatPayUtil.refund( // 由于不具备营业执照，故不会真正地调用微信的退款窗口
+            //         ordersDB.getNumber(),
+            //         ordersDB.getNumber(),
+            //         new BigDecimal(0.01),
+            //         new BigDecimal(0.01));
+            // log.info("申请退款：{}", refund);
+            log.info("管理端申请退款：模拟申请退款");
         }
 
         // 管理端取消订单需要退款，根据订单id更新订单状态、取消原因、取消时间
@@ -552,6 +532,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 客户催单
+     *
      * @param id
      */
     public void reminder(Long id) {
@@ -564,11 +545,11 @@ public class OrderServiceImpl implements OrderService {
         }
 
         Map map = new HashMap();
-        map.put("type",2); //1表示来单提醒 2表示客户催单
-        map.put("orderId",id);
-        map.put("content","订单号：" + ordersDB.getNumber());
+        map.put("type", 2); // 1表示来单提醒 2表示客户催单
+        map.put("orderId", id);
+        map.put("content", "订单号：" + ordersDB.getNumber());
 
-        //通过websocket向客户端浏览器推送消息
+        // 通过websocket向客户端浏览器推送消息
         webSocketServer.sendToAllClient(JSON.toJSONString(map));
     }
 
