@@ -95,11 +95,11 @@ public class ReportController {
      * 导出运营数据报表
      * @param response
      */
-    // @GetMapping("/export")
-    // @ApiOperation("导出运营数据报表")
-    // public void export(HttpServletResponse response){
-    //     reportService.exportBusinessData(response);
-    // }
+    @GetMapping("/export")
+    @ApiOperation("导出运营数据报表")
+    public void export(HttpServletResponse response){
+        reportService.exportBusinessData(response);
+    }
 
 
 }
