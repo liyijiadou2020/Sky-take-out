@@ -250,7 +250,7 @@ public class ReportServiceImpl implements ReportService {
 
         try {
             //基于模板文件创建一个新的Excel文件
-            XSSFWorkbook excel = new XSSFWorkbook(in);
+            XSSFWorkbook excel = new XSSFWorkbook(in); // todo null
 
             //获取表格文件的Sheet页
             XSSFSheet sheet = excel.getSheet("Sheet1");
