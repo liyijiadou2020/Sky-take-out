@@ -49,7 +49,7 @@ public class CommonController {
         String filepath = "";
         // filepath = aliOssUtil.upload(file.getBytes(), objectName);
 
-        // TODO 目前直接使用随便一张图片来填充请求路径，目的只是实现回显功能
+        // 目前直接使用随便一张图片来填充请求路径，目的只是实现回显功能
         filepath = "https://raw.githubusercontent.com/liyijiadou2020/picrepo/master/202404150958936.png";
         return Result.success(filepath);
 
